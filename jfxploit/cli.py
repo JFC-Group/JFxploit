@@ -1,5 +1,5 @@
 """
-JFxploit — CLI toolkit for JCOW414 router exploitation.
+JFxploit — CLI toolkit for JF router exploitation.
 """
 from __future__ import annotations
 
@@ -18,7 +18,7 @@ from .exploits import all_exploits, auto_select, get as get_exploit
 
 app = typer.Typer(
     name="jfxploit",
-    help="CLI toolkit for JCOW414 router exploitation",
+    help="CLI toolkit for JF router exploitation",
     rich_markup_mode="rich",
     no_args_is_help=True,
 )
@@ -26,7 +26,7 @@ console = Console()
 
 BANNER = """[bold blue]
 ╔══════════════════════════════════════════════════════════════╗
-║               JFxploit — JCOW414 Exploit Toolkit             ║
+║                  JFxploit — JF Exploit Toolkit               ║
 ║                  https://github.com/JFC-Group                ║
 ╚══════════════════════════════════════════════════════════════╝
 [/bold blue]"""
@@ -106,7 +106,7 @@ def run(
     list_exploits: Annotated[bool, typer.Option("--list-exploits", help="Show available exploits and exit")] = False,
     list_actions: Annotated[bool, typer.Option("--list-actions", help="Show available actions and exit")] = False,
 ) -> None:
-    """Run exploit(s) against a JCOW414 router."""
+    """Run exploit(s) against a JF router."""
     _print_banner()
 
     if list_exploits:
@@ -127,7 +127,7 @@ def run(
         rprint("[red]--action custom requires at least one --cmd value.[/red]")
         raise typer.Exit(1)
 
-    _print_config(target, port, username, root_pass, telnet_port, exploit_choice, active_actions, cmd)
+    _print_config(target, port, username, password, root_pass, telnet_port, exploit_choice, active_actions, cmd)
 
     tgt = Target(host=target, port=port, username=username, password=password)
     commands = build_payload(active_actions, root_pass, telnet_port, custom_cmds=cmd)
@@ -155,7 +155,7 @@ def run(
 
 
 def _print_config(
-    target: str, port: int, username: str, root_pass: str,
+    target: str, port: int, username: str, password: str, root_pass: str,
     telnet_port: int, exploit_choice: str, active_actions: list[str],
     custom_cmds: list[str] | None = None,
 ) -> None:
@@ -163,8 +163,10 @@ def _print_config(
     table.add_column("Key", style="bold cyan")
     table.add_column("Value")
     table.add_row("Target", f"{target}:{port}")
-    table.add_row("Username", username)
-    table.add_row("Root password", root_pass)
+    table.add_row("Web Username", username)
+    table.add_row("Web Password", password)
+    table.add_row("Telnet Username", "root")
+    table.add_row("Telnet password", root_pass)
     table.add_row("Telnet port", str(telnet_port))
     table.add_row("Exploit", exploit_choice)
     table.add_row("Actions", ", ".join(active_actions))
