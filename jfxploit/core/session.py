@@ -14,6 +14,9 @@ def get_session(target: Target) -> tuple[str, str] | None:
     try:
         resp = httpx.post(
             f"{target.base_url}/platform.cgi",
+            headers={
+                "Referer": f"{target.base_url}/platform.cgi"
+            },
             data={
                 "button.login.users.dashboard": "Login",
                 "thispage": "index.html",
