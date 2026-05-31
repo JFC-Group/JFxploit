@@ -26,8 +26,8 @@ console = Console()
 
 BANNER = """[bold blue]
 ╔══════════════════════════════════════════════════════════════╗
-║               JFxploit — JCOW414 Exploit Toolkit            ║
-║                     github.com/itsyourap                     ║
+║               JFxploit — JCOW414 Exploit Toolkit             ║
+║                  https://github.com/JFC-Group                ║
 ╚══════════════════════════════════════════════════════════════╝
 [/bold blue]"""
 
@@ -78,7 +78,7 @@ def run(
     port: Annotated[int, typer.Option("--port", "-p", help="Router web UI port")] = 80,
     username: Annotated[str, typer.Option("--user", "-u", help="Admin username")] = "superadmin",
     password: Annotated[str, typer.Option("--password", "-P", help="Admin password")] = "87jMB=DU",
-    root_pass: Annotated[str, typer.Option("--root-pass", "-r", help="Root password to set on router")] = "toor",
+    root_pass: Annotated[str, typer.Option("--root-pass", "-r", help="Root password to set on router")] = "pa$$w0rd",
     telnet_port: Annotated[int, typer.Option("--telnet-port", "-t", help="Telnet port to open")] = 23,
     exploit_id: Annotated[
         Optional[str],

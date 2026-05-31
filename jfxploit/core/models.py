@@ -42,6 +42,6 @@ class ExploitResult:
 
 @dataclass(frozen=True)
 class ActionConfig:
-    root_pass: str = "toor"
+    root_pass: str = "pa$$w0rd"
     telnet_port: int = 23
     actions: tuple[ActionType, ...] = field(default_factory=lambda: (ActionType.ALL,))
