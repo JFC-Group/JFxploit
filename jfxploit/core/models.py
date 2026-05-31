@@ -8,6 +8,7 @@ class ActionType(str, Enum):
     IPTABLES = "iptables"
     ROOT_PASS = "rootpass"
     PERSIST = "persist"
+    CUSTOM = "custom"
     ALL = "all"
 
 

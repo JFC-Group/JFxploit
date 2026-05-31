@@ -44,7 +44,12 @@ def persist_commands(root_pass: str, telnet_port: int = 23) -> list[str]:
     return lines
 
 
-def build_payload(actions: list[str], root_pass: str, telnet_port: int = 23) -> list[str]:
+def build_payload(
+    actions: list[str],
+    root_pass: str,
+    telnet_port: int = 23,
+    custom_cmds: list[str] | None = None,
+) -> list[str]:
     """Assemble shell commands for the requested actions."""
     cmds: list[str] = []
     if "telnet" in actions or "all" in actions:
@@ -55,4 +60,6 @@ def build_payload(actions: list[str], root_pass: str, telnet_port: int = 23) -> 
         cmds.extend(root_pass_commands(root_pass))
     if "persist" in actions or "all" in actions:
         cmds.extend(persist_commands(root_pass, telnet_port))
+    if "custom" in actions and custom_cmds:
+        cmds.extend(custom_cmds)
     return cmds

