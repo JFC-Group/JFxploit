@@ -15,10 +15,10 @@ def get_session(target: Target) -> tuple[str, str] | None:
         resp = httpx.post(
             f"{target.base_url}/platform.cgi",
             data={
-                "button.login.login.statusPage": "Login",
-                "thispage": "login.html",
-                "Admin_Name": target.username,
-                "Admin_Password": target.password,
+                "button.login.users.dashboard": "Login",
+                "thispage": "index.html",
+                "users.username": target.username,
+                "users.password": target.password,
             },
             follow_redirects=True,
             timeout=10,
