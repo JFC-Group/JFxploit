@@ -137,8 +137,8 @@ def run(
         raise typer.Exit(1)
 
     rprint(f"\n[bold]Shell commands to inject ({len(commands)}):[/bold]")
-    for cmd in commands:
-        rprint(f"  [dim]»[/dim] {cmd}")
+    for shell_cmd in commands:
+        rprint(f"  [dim]»[/dim] {shell_cmd}")
 
     rprint("\n[bold]Launching exploit...[/bold]")
 
