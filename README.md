@@ -109,6 +109,8 @@ List all available post-exploitation actions.
 | f04 | Post-Auth | `gpon.vlanID` shell injection in GPON/WAN configuration |
 | f05 | Post-Auth | `server` parameter injection in `jsonApi` speed test handler |
 | f06 | Post-Auth | `website` parameter injection in `jsonApi` web download handler |
+| f07 | Pre-Auth | `Admin_Password` field injection in Mesh API ForcedLogin handler |
+| f08 | Post-Auth | `file` field injection in the USB restore handler |
 
 When `--exploit auto` is used (the default), exploits are tried in the order above — pre-auth first, then post-auth — and the first successful one is used.
 
